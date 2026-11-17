@@ -44,7 +44,6 @@ function formatNumber(number) {
 function getPriceForStars(stars) {
     stars = Math.max(MIN_STARS, Math.min(MAX_STARS, stars));
 
-    // Для пакетов используем точную указанную цену
     const exactTier = pricingTiers.find(
         tier => tier.stars === stars
     );
@@ -53,8 +52,6 @@ function getPriceForStars(stars) {
         return exactTier.price;
     }
 
-    // Для количества меньше первого следующего пакета
-    // рассчитываем цену между двумя ближайшими пакетами
     for (let i = 0; i < pricingTiers.length - 1; i++) {
         const lower = pricingTiers[i];
         const upper = pricingTiers[i + 1];
@@ -72,7 +69,6 @@ function getPriceForStars(stars) {
         }
     }
 
-    // Свыше 10 000 Stars используем цену за звезду
     const lastTier = pricingTiers[pricingTiers.length - 1];
 
     return Math.round(
@@ -273,14 +269,16 @@ modalOverlay.addEventListener("click", event => {
 
 // Закрытие клавишей Escape
 document.addEventListener("keydown", event => {
-    if (event.key === "Escape" &&
-        modalOverlay.classList.contains("active")) {
+    if (
+        event.key === "Escape" &&
+        modalOverlay.classList.contains("active")
+    ) {
         closeModal();
     }
 });
 
 // Отправка заказа в Telegram
-orderForm.addEventListener("submit", event => {
+orderForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const username = usernameInput.value.trim();
@@ -307,24 +305,13 @@ orderForm.addEventListener("submit", event => {
         "👤 Telegram покупателя: " + username;
 
     const telegramURL =
-        "https://t.me/Stars1229?text=" +
+        "https://t.me/Dragon_jdjd" 
         encodeURIComponent(message);
 
-    // Открываем Telegram с подготовленным сообщением
-    const telegramWindow = window.open(
-        telegramURL,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-    if (!telegramWindow) {
-        formError.textContent =
-            "Браузер заблокировал новое окно. Разреши открытие окон и попробуй ещё раз.";
-
-        return;
-    }
-
     closeModal();
+
+    // Переход в Telegram
+    window.location.href = telegramURL;
 });
 
 // Анимированный фон с частицами
