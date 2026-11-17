@@ -1,3 +1,4 @@
+ HEAD
 
 "use strict";
 
@@ -432,3 +433,570 @@ document.addEventListener("visibilitychange", () => {
 
 // Первоначальный расчёт
 calculatePrice();
+
+
+"use strict";
+
+// ========================================
+// НАСТРОЙКИ
+// ========================================
+
+const TELEGRAM_USERNAME = "Dragon_jdjd";
+
+const pricingTiers = [
+    { stars: 50, price: 13000 },
+    { stars: 100, price: 24000 },
+    { stars: 200, price: 46000 },
+    { stars: 350, price: 79000 },
+    { stars: 500, price: 112000 },
+    { stars: 750, price: 167000 },
+    { stars: 1000, price: 222000 },
+    { stars: 2000, price: 442000 },
+    { stars: 5000, price: 1102000 },
+    { stars: 10000, price: 2202000 }
+];
+
+const MIN_STARS = 50;
+const MAX_STARS = 10000000;
+
+// ========================================
+// ЭЛЕМЕНТЫ
+// ========================================
+
+const starInput = document.getElementById("starInput");
+const calcPrice = document.getElementById("calcPrice");
+const inputHint = document.getElementById("inputHint");
+
+const modalOverlay = document.getElementById("modalOverlay");
+const modalStarsCount = document.getElementById("modalStarsCount");
+const modalTotalPrice = document.getElementById("modalTotalPrice");
+
+const usernameInput = document.getElementById("usernameInput");
+const formError = document.getElementById("formError");
+const orderForm = document.getElementById("orderForm");
+
+const calcOrderBtn = document.getElementById("calcOrderBtn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+
+let selectedStars = 50;
+let selectedPrice = 13000;
+
+// ========================================
+// ФОРМАТИРОВАНИЕ
+// ========================================
+
+function formatNumber(number) {
+    return Math.round(number).toLocaleString("ru-RU");
+}
+
+// ========================================
+// РАСЧЁТ ЦЕНЫ
+// ========================================
+
+function getPriceForStars(stars) {
+    stars = Math.max(MIN_STARS, Math.min(MAX_STARS, stars));
+
+    const exactTier = pricingTiers.find(
+        tier => tier.stars === stars
+    );
+
+    if (exactTier) {
+        return exactTier.price;
+    }
+
+    for (let i = 0; i < pricingTiers.length - 1; i++) {
+        const lower = pricingTiers[i];
+        const upper = pricingTiers[i + 1];
+
+        if (stars > lower.stars && stars < upper.stars) {
+            const progress =
+                (stars - lower.stars) /
+                (upper.stars - lower.stars);
+
+            return Math.round(
+                lower.price +
+                progress * (upper.price - lower.price)
+            );
+        }
+    }
+
+    const lastTier = pricingTiers[pricingTiers.length - 1];
+
+    return Math.round(
+        stars * (lastTier.price / lastTier.stars)
+    );
+}
+
+// ========================================
+// КАЛЬКУЛЯТОР
+// ========================================
+
+function calculatePrice() {
+    const rawValue = Number(starInput.value);
+
+    if (
+        starInput.value.trim() === "" ||
+        !Number.isFinite(rawValue)
+    ) {
+        calcPrice.textContent = "—";
+        inputHint.textContent = "Введи количество Stars";
+        return;
+    }
+
+    if (rawValue < MIN_STARS) {
+        calcPrice.textContent =
+            formatNumber(13000) + " сум";
+
+        inputHint.textContent =
+            "Минимальный заказ — 50 Stars";
+
+        return;
+    }
+
+    if (rawValue > MAX_STARS) {
+        calcPrice.textContent = "—";
+
+        inputHint.textContent =
+            "Максимум — 10 000 000 Stars";
+
+        return;
+    }
+
+    const stars = Math.floor(rawValue);
+    const price = getPriceForStars(stars);
+
+    calcPrice.textContent =
+        formatNumber(price) + " сум";
+
+    inputHint.textContent =
+        "Количество: " + formatNumber(stars) + " Stars";
+}
+
+// ========================================
+// БЫСТРОЕ ДОБАВЛЕНИЕ
+// ========================================
+
+function addStars(amount) {
+    const current = Number(starInput.value);
+
+    const base =
+        Number.isFinite(current) && current >= MIN_STARS
+            ? Math.floor(current)
+            : MIN_STARS;
+
+    starInput.value = Math.min(
+        MAX_STARS,
+        base + amount
+    );
+
+    calculatePrice();
+}
+
+// ========================================
+// ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+// ========================================
+
+function switchTab(tabId) {
+    document.querySelectorAll(".tab-btn").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.tab === tabId
+        );
+    });
+
+    document.querySelectorAll(".content-section").forEach(section => {
+        section.classList.toggle(
+            "active",
+            section.id === tabId
+        );
+    });
+
+    if (tabId === "calculator") {
+        calculatePrice();
+    }
+}
+
+// ========================================
+// ОТКРЫТИЕ ОКНА ЗАКАЗА
+// ========================================
+
+function openModal(stars, price) {
+    selectedStars = stars;
+    selectedPrice = price;
+
+    modalStarsCount.textContent =
+        formatNumber(stars) + " ⭐";
+
+    modalTotalPrice.textContent =
+        formatNumber(price) + " сум";
+
+    formError.textContent = "";
+
+    modalOverlay.classList.add("active");
+
+    modalOverlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => {
+        usernameInput.focus();
+    }, 100);
+}
+
+// ========================================
+// ЗАКАЗ ИЗ КАЛЬКУЛЯТОРА
+// ========================================
+
+function openModalFromCalc() {
+    const rawValue = Number(starInput.value);
+
+    if (
+        starInput.value.trim() === "" ||
+        !Number.isFinite(rawValue) ||
+        rawValue < MIN_STARS ||
+        rawValue > MAX_STARS
+    ) {
+        inputHint.textContent =
+            "Введи число от 50 до 10 000 000";
+
+        starInput.focus();
+        return;
+    }
+
+    const stars = Math.floor(rawValue);
+    const price = getPriceForStars(stars);
+
+    openModal(stars, price);
+}
+
+// ========================================
+// ЗАКРЫТИЕ ОКНА
+// ========================================
+
+function closeModal() {
+    modalOverlay.classList.remove("active");
+
+    modalOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow = "";
+
+    formError.textContent = "";
+}
+
+// ========================================
+// ВКЛАДКИ
+// ========================================
+
+document.querySelectorAll(".tab-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        switchTab(button.dataset.tab);
+    });
+});
+
+// ========================================
+// ПАКЕТЫ
+// ========================================
+
+document.querySelectorAll(".package-card").forEach(button => {
+    button.addEventListener("click", () => {
+        const stars = Number(button.dataset.stars);
+        const price = Number(button.dataset.price);
+
+        if (
+            !Number.isFinite(stars) ||
+            !Number.isFinite(price) ||
+            stars < MIN_STARS ||
+            price <= 0
+        ) {
+            return;
+        }
+
+        openModal(stars, price);
+    });
+});
+
+// ========================================
+// КАЛЬКУЛЯТОР
+// ========================================
+
+starInput.addEventListener("input", calculatePrice);
+
+// ========================================
+// БЫСТРЫЕ КНОПКИ
+// ========================================
+
+document.querySelectorAll(".btn-add").forEach(button => {
+    button.addEventListener("click", () => {
+        addStars(Number(button.dataset.add));
+    });
+});
+
+// ========================================
+// КНОПКИ ОФОРМЛЕНИЯ
+// ========================================
+
+calcOrderBtn.addEventListener(
+    "click",
+    openModalFromCalc
+);
+
+closeModalBtn.addEventListener(
+    "click",
+    closeModal
+);
+
+// Закрытие при нажатии на фон
+modalOverlay.addEventListener("click", event => {
+    if (event.target === modalOverlay) {
+        closeModal();
+    }
+});
+
+// Закрытие клавишей Escape
+document.addEventListener("keydown", event => {
+    if (
+        event.key === "Escape" &&
+        modalOverlay.classList.contains("active")
+    ) {
+        closeModal();
+    }
+});
+
+// ========================================
+// TELEGRAM — ОТПРАВКА ЗАКАЗА
+// ========================================
+
+orderForm.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const username = usernameInput.value.trim();
+
+    // Проверка покупателя
+    if (!username) {
+        formError.textContent =
+            "Укажи свой Telegram username или ID.";
+
+        usernameInput.focus();
+        return;
+    }
+
+    if (username.length > 100) {
+        formError.textContent =
+            "Слишком длинный username или ID.";
+
+        return;
+    }
+
+    // Проверка администратора
+    const admin = TELEGRAM_USERNAME
+        .replace(/^@+/, "")
+        .trim();
+
+    if (!/^[a-zA-Z0-9_]+$/.test(admin)) {
+        formError.textContent =
+            "Ошибка настройки Telegram администратора.";
+
+        return;
+    }
+
+    // Создание сообщения
+    const message =
+        "Здравствуйте! Хочу купить Telegram Stars:\n\n" +
+        "⭐ Количество: " +
+        formatNumber(selectedStars) +
+        " Stars\n" +
+
+        "💰 Сумма: " +
+        formatNumber(selectedPrice) +
+        " сум\n" +
+
+        "👤 Telegram покупателя: " +
+        username;
+
+    // ВАЖНО: username добавляется только один раз
+    const telegramURL =
+        "https://t.me/" +
+        admin +
+        "?text=" +
+        encodeURIComponent(message);
+
+    // Переход в Telegram
+    window.location.href = telegramURL;
+
+});
+
+// ========================================
+// АНИМИРОВАННЫЙ ФОН
+// ========================================
+
+const canvas = document.getElementById("bgCanvas");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+let canvasWidth = 0;
+let canvasHeight = 0;
+let animationFrame = null;
+
+class Particle {
+
+    constructor(randomY = false) {
+
+        this.x = Math.random() * canvasWidth;
+
+        this.y = randomY
+            ? Math.random() * canvasHeight
+            : canvasHeight;
+
+        this.size = Math.random() * 2 + 0.5;
+
+        this.speedY =
+            Math.random() * 0.65 + 0.15;
+
+        this.opacity =
+            Math.random() * 0.45 + 0.15;
+    }
+
+    update() {
+
+        this.y -= this.speedY;
+
+        if (this.y < -5) {
+
+            this.y = canvasHeight + 5;
+
+            this.x = Math.random() * canvasWidth;
+        }
+    }
+
+    draw() {
+
+        ctx.fillStyle =
+            `rgba(0, 210, 255, ${this.opacity})`;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
+
+// ========================================
+// ИЗМЕНЕНИЕ РАЗМЕРА ФОНА
+// ========================================
+
+function resizeCanvas() {
+
+    const pixelRatio = Math.min(
+        window.devicePixelRatio || 1,
+        2
+    );
+
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
+
+    canvas.width =
+        Math.round(canvasWidth * pixelRatio);
+
+    canvas.height =
+        Math.round(canvasHeight * pixelRatio);
+
+    ctx.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0
+    );
+
+    const particleCount = Math.min(
+        70,
+        Math.max(30, Math.floor(canvasWidth / 18))
+    );
+
+    particles = Array.from(
+        { length: particleCount },
+        () => new Particle(true)
+    );
+}
+
+// ========================================
+// АНИМАЦИЯ
+// ========================================
+
+function animateBackground() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvasWidth,
+        canvasHeight
+    );
+
+    particles.forEach(particle => {
+
+        particle.update();
+
+        particle.draw();
+
+    });
+
+    animationFrame = requestAnimationFrame(
+        animateBackground
+    );
+}
+
+// ========================================
+// ЗАПУСК
+// ========================================
+
+resizeCanvas();
+
+animateBackground();
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+// Остановка анимации при скрытии вкладки
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (document.hidden) {
+
+            if (animationFrame !== null) {
+
+                cancelAnimationFrame(animationFrame);
+
+                animationFrame = null;
+            }
+
+        } else if (animationFrame === null) {
+
+            animateBackground();
+        }
+    }
+);
+
+// ========================================
+// ПЕРВОНАЧАЛЬНЫЙ РАСЧЁТ
+// ========================================
+
+calculatePrice();
+ c245bcd (Fix +Telegram  +Stars +Store)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -310,3 +311,379 @@
     </div>
 </body>
 </html>
+=======
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070a14">
+
+    <title>Telegram Stars Store</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+
+<body>
+
+    <canvas class="bg-canvas" id="bgCanvas"></canvas>
+
+    <main class="container">
+
+        <header class="header">
+
+            <div class="header-logo">
+                <i class="fa-brands fa-telegram"></i>
+            </div>
+
+            <h1 class="header-title">
+                <i class="fa-solid fa-star"></i>
+                ПРОДАЖА STARS
+                <i class="fa-solid fa-star"></i>
+            </h1>
+
+            <p class="header-subtitle">
+                Telegram Stars быстро и удобно
+            </p>
+
+            <div class="header-status">
+                <span class="status-dot"></span>
+                Принимаем заказы
+            </div>
+
+        </header>
+
+        <nav class="tabs">
+
+            <button class="tab-btn active" type="button" data-tab="packages">
+                <i class="fa-solid fa-box"></i>
+                Пакеты
+            </button>
+
+            <button class="tab-btn" type="button" data-tab="calculator">
+                <i class="fa-solid fa-calculator"></i>
+                Калькулятор
+            </button>
+
+        </nav>
+
+        <!-- ПАКЕТЫ -->
+
+        <section id="packages" class="content-section active">
+
+            <div class="section-top">
+                <div>
+                    <h2 class="section-heading">Выбери свой пакет</h2>
+                    <p class="section-description">Выбери количество Stars для покупки</p>
+                </div>
+
+                <div class="section-icon">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+            </div>
+
+            <div class="packages-grid">
+
+                <button class="package-card" type="button" data-stars="50" data-price="13000">
+                    <span class="package-number">01</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 50 Stars</span>
+                    <span class="price-tag">13 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="100" data-price="24000">
+                    <span class="package-number">02</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 100 Stars</span>
+                    <span class="price-tag">24 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="200" data-price="46000">
+                    <span class="package-number">03</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 200 Stars</span>
+                    <span class="price-tag">46 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="350" data-price="79000">
+                    <span class="package-number">04</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 350 Stars</span>
+                    <span class="price-tag">79 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="500" data-price="112000">
+                    <span class="package-number">05</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 500 Stars</span>
+                    <span class="price-tag">112 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="750" data-price="167000">
+                    <span class="package-number">06</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 750 Stars</span>
+                    <span class="price-tag">167 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card popular" type="button" data-stars="1000" data-price="222000">
+                    <span class="popular-label">ПОПУЛЯРНЫЙ</span>
+                    <span class="package-number">07</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 1 000 Stars</span>
+                    <span class="price-tag">222 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="2000" data-price="442000">
+                    <span class="package-number">08</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 2 000 Stars</span>
+                    <span class="price-tag">442 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="5000" data-price="1102000">
+                    <span class="package-number">09</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 5 000 Stars</span>
+                    <span class="price-tag">1 102 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+                <button class="package-card" type="button" data-stars="10000" data-price="2202000">
+                    <span class="package-number">10</span>
+                    <span class="star-info"><i class="fa-solid fa-star star-icon"></i> 10 000 Stars</span>
+                    <span class="price-tag">2 202 000 сум</span>
+                    <span class="package-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- КАЛЬКУЛЯТОР -->
+
+        <section id="calculator" class="content-section">
+
+            <div class="calc-box">
+
+                <div class="calc-heading-icon">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+
+                <h2 class="section-heading">Калькулятор Stars</h2>
+
+                <p class="section-description">
+                    Самостоятельно выбери нужное количество звёзд
+                </p>
+
+                <div class="calc-input-group">
+
+                    <label for="starInput">
+                        Количество звёзд (минимум 50)
+                    </label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="number"
+                            id="starInput"
+                            value="50"
+                            min="50"
+                            max="10000000"
+                            step="1"
+                            inputmode="numeric"
+                        >
+
+                        <i class="fa-solid fa-star input-icon"></i>
+                    </div>
+
+                    <p class="input-hint" id="inputHint">
+                        Введи количество Stars
+                    </p>
+
+                </div>
+
+                <div class="quick-add-btns">
+                    <button class="btn-add" type="button" data-add="50">+50</button>
+                    <button class="btn-add" type="button" data-add="100">+100</button>
+                    <button class="btn-add" type="button" data-add="500">+500</button>
+                    <button class="btn-add" type="button" data-add="1000">+1000</button>
+                </div>
+
+                <div class="calc-result">
+
+                    <span class="calc-result-title">
+                        Итоговая стоимость:
+                    </span>
+
+                    <span class="calc-result-price" id="calcPrice">
+                        13 000 сум
+                    </span>
+
+                </div>
+
+                <button class="btn-order-main" id="calcOrderBtn" type="button">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Перейти к оформлению
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- ИНФОРМАЦИЯ -->
+
+        <section class="info-grid">
+
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fa-regular fa-credit-card"></i>
+                </div>
+
+                <div class="info-text">
+                    <h3>Оплата</h3>
+                    <p>Картой или наличными 💵</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+
+                <div class="info-text">
+                    <h3>Скорость</h3>
+                    <p>От 1 до 5 минут ⚡</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- КОНТАКТ -->
+
+        <a href="https://t.me/Dragon_jdjd"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="tg-contact-btn">
+
+            <span class="contact-left">
+
+                <i class="fa-brands fa-telegram contact-telegram"></i>
+
+                <span>
+                    <span class="contact-caption">
+                        Для заказа свяжитесь:
+                    </span>
+
+                    <strong>@Dragon_jdjd</strong>
+                </span>
+
+            </span>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+        </a>
+
+        <div class="badge-fast">
+            <i class="fa-solid fa-bolt"></i>
+            Быстро и удобно!
+        </div>
+
+        <footer class="footer">
+            <p>TELEGRAM STARS STORE</p>
+            <span>© 2026 Все права защищены</span>
+        </footer>
+
+    </main>
+
+    <!-- ОКНО ОФОРМЛЕНИЯ -->
+
+    <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+
+        <section class="modal"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="modalTitle">
+
+            <div class="modal-header">
+
+                <div>
+                    <span class="modal-small-title">ВАШ ЗАКАЗ</span>
+                    <h2 class="modal-title" id="modalTitle">
+                        Подтверждение заказа
+                    </h2>
+                </div>
+
+                <button class="modal-close"
+                        id="closeModalBtn"
+                        type="button"
+                        aria-label="Закрыть">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+            <div class="modal-summary">
+
+                <div class="summary-row">
+                    <span>Количество Stars:</span>
+                    <strong id="modalStarsCount">50 ⭐</strong>
+                </div>
+
+                <div class="summary-row total">
+                    <span>К оплате:</span>
+                    <strong id="modalTotalPrice">13 000 сум</strong>
+                </div>
+
+            </div>
+
+            <form id="orderForm">
+
+                <div class="calc-input-group">
+
+                    <label for="usernameInput">
+                        Ваш Telegram username или ID
+                    </label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="text"
+                            id="usernameInput"
+                            placeholder="@username"
+                            maxlength="100"
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <p class="form-error" id="formError" role="alert"></p>
+
+                <button class="btn-order-main" type="submit">
+                    <i class="fa-brands fa-telegram"></i>
+                    Перейти в Telegram
+                </button>
+
+            </form>
+
+            <p class="modal-note">
+                Проверь заказ перед отправкой. Сообщение откроется
+                в Telegram, где его можно будет отправить продавцу.
+            </p>
+
+        </section>
+
+    </div>
+
+</body>
+</html>
+>>>>>>> c245bcd (Fix Telegram Stars Store)
